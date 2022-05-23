@@ -101,12 +101,14 @@ export default function InputFields() {
         <label htmlFor="firstName">First name</label>
 
         <input
+          id="firstName"
           onChange={(event) => setFirstName(event.currentTarget.value)}
           value={firstName}
         />
         <label htmlFor="lastName">Last name</label>
 
         <input
+          id="lastName"
           onChange={(event) => setLastName(event.currentTarget.value)}
           value={lastName}
         />
