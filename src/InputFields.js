@@ -98,24 +98,18 @@ export default function InputFields() {
       <h1>Guest List</h1>
 
       <form onSubmit={(e) => onSubmit(e)}>
-        <label>
-          {' '}
-          First name
-          <input
-            onChange={(event) => setFirstName(event.currentTarget.value)}
-            value={firstName}
-          />
-        </label>
+        <label htmlFor="firstName">First name</label>
 
-        <label>
-          {' '}
-          Last name
-          <input
-            onChange={(event) => setLastName(event.currentTarget.value)}
-            value={lastName}
-          />
-        </label>
+        <input
+          onChange={(event) => setFirstName(event.currentTarget.value)}
+          value={firstName}
+        />
+        <label htmlFor="firstName">Last name</label>
 
+        <input
+          onChange={(event) => setLastName(event.currentTarget.value)}
+          value={lastName}
+        />
         <button
           onClick={() => {
             newGuest().catch(() => {});
