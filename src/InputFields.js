@@ -99,12 +99,12 @@ export default function InputFields() {
 
       <form onSubmit={(e) => onSubmit(e)}>
         <label htmlFor="firstName">First name</label>
-
         <input
           id="firstName"
           placeholder="First Name"
           onChange={(event) => setFirstName(event.currentTarget.value)}
           value={firstName}
+          disabled={loading ? 'disabled' : ''}
         />
         <label htmlFor="lastName">Last name</label>
 
@@ -113,6 +113,7 @@ export default function InputFields() {
           placeholder="Last Name"
           onChange={(event) => setLastName(event.currentTarget.value)}
           value={lastName}
+          disabled={loading ? 'disabled' : ''}
         />
         <button
           onClick={() => {
