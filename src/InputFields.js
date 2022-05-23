@@ -4,8 +4,11 @@ export default function InputFields() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [guestList, setGuestList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const baseUrl = 'http://localhost:4000';
+
+  // getting all Guests
 
   useEffect(() => {
     async function getGuestList() {
@@ -13,6 +16,7 @@ export default function InputFields() {
       const data = await response.json();
 
       setGuestList(data);
+      setLoading(false);
     }
     getGuestList().catch(() => {});
   }, []);
@@ -29,43 +33,57 @@ export default function InputFields() {
       body: JSON.stringify({ firstName: firstName, lastName: lastName }),
     });
     const createdGuest = await response.json();
+    setFirstName('');
+    setLastName('');
 
     setGuestList([...guestList, createdGuest]);
   }
 
-  const onSubmit = async (event) => {
+  // on Submit for Form
+  const onSubmit = (event) => {
     event.preventDefault();
+    if (!firstName || !lastName) {
+      alert('PLEASE ENTER FULL NAME');
+      return;
+    }
   };
 
   // Update Guest
-  async function updateAttendance(id, status) {
-    const response = await fetch(`${baseUrl}/guests/${guestList.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ attending: status }),
+
+  function updateAttendance(id, status) {
+    async function editGuest() {
+      const response = await fetch(`${baseUrl}/guests/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ attending: status }),
+      });
+      const updatedGuest = await response.json();
+      console.log(updatedGuest);
+
+      const guestListCopy = [...guestList];
+      const findGuest = guestListCopy.find((guest) => guest.id === id);
+      findGuest.attending = status;
+
+      console.log(findGuest);
+
+      setGuestList(guestListCopy);
+      return updatedGuest;
+    }
+    editGuest().catch((error) => {
+      console.log(error);
     });
-    const updatedGuest = await response.json();
-    console.log(updatedGuest);
-
-    const guestListCopy = [...guestList];
-    const findGuest = guestListCopy.find((guest) => guest.id === id);
-    findGuest.attending = status;
-
-    console.log(findGuest);
-
-    setGuestList(guestListCopy);
-    return updatedGuest;
   }
   // removing Guest
 
   function handleDelete(id) {
     async function deleteGuest() {
-      const response = await fetch(`${baseUrl}/guests/${guestList.id}`, {
+      const response = await fetch(`${baseUrl}/guests/${id}`, {
         method: 'DELETE',
       });
       const deletedGuest = await response.json();
+      console.log(deletedGuest);
     }
     deleteGuest().catch((error) => {
       console.log(error);
@@ -75,7 +93,7 @@ export default function InputFields() {
   }
 
   return (
-    <div>
+    <div data-test-id="guest">
       {/* {JSON.stringify(guestList)} */}
       <h1>Guest List</h1>
 
@@ -100,10 +118,10 @@ export default function InputFields() {
 
         <button
           onClick={() => {
-            newGuest();
+            newGuest().catch(() => {});
           }}
         >
-          Submit
+          Add guest
         </button>
       </form>
 
@@ -115,20 +133,24 @@ export default function InputFields() {
       <br />
       <br />
       <br />
+      {loading ? 'Loading...' : ''}
       {guestList.map((guest) => (
-        <div key={guest.id}>
+        <div
+          key={guest.id}
+          className={guest.isChecked ? 'attending' : 'notAttending'}
+        >
           <input
+            aria-label="Guest Attending"
             checked={guest.attending}
             type="checkbox"
             onChange={(event) => {
-              updateAttendance(guest.id, event.currentTarget.checked).catch(
-                () => {},
-              );
+              updateAttendance(guest.id, event.currentTarget.checked);
             }}
           />{' '}
-          {guest.attending ? 'Attending' : 'Not attending'}| {guest.firstName}{' '}
+          {guest.attending ? 'attending' : 'not attending'}| {guest.firstName}{' '}
           {guest.lastName}
           <button
+            aria-label="Remove"
             type="button"
             id="delete"
             onClick={() => handleDelete(guest.id)}
