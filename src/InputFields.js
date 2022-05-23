@@ -93,7 +93,7 @@ export default function InputFields() {
   }
 
   return (
-    <div data-test-id="guest">
+    <div>
       {/* {JSON.stringify(guestList)} */}
       <h1>Guest List</h1>
 
@@ -102,6 +102,7 @@ export default function InputFields() {
 
         <input
           id="firstName"
+          placeholder="First Name"
           onChange={(event) => setFirstName(event.currentTarget.value)}
           value={firstName}
         />
@@ -109,6 +110,7 @@ export default function InputFields() {
 
         <input
           id="lastName"
+          placeholder="Last Name"
           onChange={(event) => setLastName(event.currentTarget.value)}
           value={lastName}
         />
@@ -132,6 +134,7 @@ export default function InputFields() {
       {loading ? 'Loading...' : ''}
       {guestList.map((guest) => (
         <div
+          data-test-id="guest"
           key={guest.id}
           className={guest.isChecked ? 'attending' : 'notAttending'}
         >
