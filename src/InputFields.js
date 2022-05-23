@@ -6,7 +6,7 @@ export default function InputFields() {
   const [guestList, setGuestList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const baseUrl = 'http://localhost:4000';
+  const baseUrl = 'https://react-guest-list-philippanton.herokuapp.com/';
 
   // getting all Guests
 
