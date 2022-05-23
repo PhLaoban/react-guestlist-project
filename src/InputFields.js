@@ -1,4 +1,90 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
+
+const background = css`
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(121, 59, 9, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
+  height: 2000px;
+  width: auto;
+
+  background-repeat: no-repeat;
+
+  /* background: orange; */
+`;
+
+const inputFields = css`
+  input {
+    font-family: 'Poiret One';
+    color: white;
+    font-weight: bolder;
+    font-size: 1.8rem;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    border-radius: 0.2rem;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(
+      90deg,
+      rgba(2, 0, 36, 1) 0%,
+      rgba(121, 59, 9, 1) 35%,
+      rgba(0, 212, 255, 1) 100%
+    );
+    opacity: 0.7;
+    border: none;
+    width: 30%;
+    display: block;
+    border-bottom: 0.3rem solid transparent;
+    transition: all 0.3s;
+  }
+`;
+
+const button = css`
+  width: 220px;
+  height: 60px;
+  border-color: white;
+  background-color: var(--light-theme);
+  cursor: pointer;
+  font-size: 24px;
+  color: var(--color);
+  transition: all 0.3s;
+
+  text-align: center;
+  overflow: hidden;
+
+  border-radius: 5px;
+  box-shadow: 0 6px 30px -10px rgba(#cccccc, 1);
+
+  &:hover {
+    transform: translateX(5px) translateY(-7px);
+  }
+`;
+const removeButtonField = css`
+  display: flex;
+  max-width: 800px;
+  justify-content: space-between;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
+`;
+
+const checkbox = css`
+  width: 15px;
+  height: 15px;
+  border-radius: 5px;
+  border: 2px solid #8cad2d;
+  background-color: #fff;
+  display: block;
+  content: '';
+  float: left;
+  margin-right: 5px;
+  z-index: 5;
+  position: relative;
+`;
 
 export default function InputFields() {
   const [firstName, setFirstName] = useState('');
@@ -95,70 +181,81 @@ export default function InputFields() {
   return (
     <div>
       {/* {JSON.stringify(guestList)} */}
-      <h1>Guest List</h1>
+      <div css={background}>
+        <br />
+        <br />
+        <h1>Guest List</h1>
 
-      <form onSubmit={(e) => onSubmit(e)}>
-        <label htmlFor="firstName">First name</label>
-        <input
-          id="firstName"
-          placeholder="First Name"
-          onChange={(event) => setFirstName(event.currentTarget.value)}
-          value={firstName}
-          disabled={loading ? 'disabled' : ''}
-        />
-        <label htmlFor="lastName">Last name</label>
+        <form onSubmit={(e) => onSubmit(e)}>
+          <div css={inputFields}>
+            <label htmlFor="firstName">First name</label>
+            <input
+              id="firstName"
+              placeholder="First Name"
+              onChange={(event) => setFirstName(event.currentTarget.value)}
+              value={firstName}
+              disabled={loading ? 'disabled' : ''}
+            />
+            <label htmlFor="lastName">Last name</label>
+            <input
+              id="lastName"
+              placeholder="Last Name"
+              onChange={(event) => setLastName(event.currentTarget.value)}
+              value={lastName}
+              disabled={loading ? 'disabled' : ''}
+            />{' '}
+          </div>
+          <br />
+          <button
+            css={button}
+            style={{ fontFamily: 'Poiret One', fontWeight: 'bolder' }}
+            onClick={() => {
+              newGuest().catch(() => {});
+            }}
+          >
+            Add guest
+          </button>
+        </form>
 
-        <input
-          id="lastName"
-          placeholder="Last Name"
-          onChange={(event) => setLastName(event.currentTarget.value)}
-          value={lastName}
-          disabled={loading ? 'disabled' : ''}
-        />
-        <button
-          onClick={() => {
-            newGuest().catch(() => {});
-          }}
-        >
-          Add guest
-        </button>
-      </form>
-
-      {/* {guestList.map((guest) => {
+        {/* {guestList.map((guest) => {
         return (<div key={guest.id}>{guest.firstName}<div/>)
       })} */}
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      {loading ? 'Loading...' : ''}
-      {guestList.map((guest) => (
-        <div
-          data-test-id="guest"
-          key={guest.id}
-          className={guest.isChecked ? 'attending' : 'notAttending'}
-        >
-          <input
-            aria-label="Guest Attending"
-            checked={guest.attending}
-            type="checkbox"
-            onChange={(event) => {
-              updateAttendance(guest.id, event.currentTarget.checked);
-            }}
-          />{' '}
-          {guest.attending ? 'attending' : 'not attending'}| {guest.firstName}{' '}
-          {guest.lastName}
-          <button
-            aria-label="Remove"
-            type="button"
-            id="delete"
-            onClick={() => handleDelete(guest.id)}
+        <br />
+
+        <br />
+        {loading ? 'Loading...' : ''}
+        {guestList.map((guest) => (
+          <div
+            data-test-id="guest"
+            key={guest.id}
+            className={guest.isChecked ? 'attending' : 'notAttending'}
           >
-            Remove
-          </button>
-        </div>
-      ))}
+            {' '}
+            <div css={removeButtonField}>
+              <input
+                css={checkbox}
+                aria-label="Guest Attending"
+                checked={guest.attending}
+                type="checkbox"
+                onChange={(event) => {
+                  updateAttendance(guest.id, event.currentTarget.checked);
+                }}
+              />{' '}
+              {guest.firstName} {guest.lastName}{' '}
+              {guest.attending ? 'is attending' : 'is not attending'}{' '}
+              <button
+                css={button}
+                aria-label="Remove"
+                type="button"
+                id="delete"
+                onClick={() => handleDelete(guest.id)}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

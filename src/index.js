@@ -1,4 +1,5 @@
 import './index.css';
+import { css, Global } from '@emotion/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -8,6 +9,21 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
+    <Global
+      styles={css`
+        Body {
+          font-weight: 500;
+          font-family: 'Poiret One', cursive;
+          font-size: 40px;
+          color: beige;
+        }
+        *,
+        ::before,
+        ::after {
+          box-sizing: border-box;
+        }
+      `}
+    />
     <App />
   </React.StrictMode>,
 );
