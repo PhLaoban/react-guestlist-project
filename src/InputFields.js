@@ -104,7 +104,7 @@ export default function InputFields() {
           onChange={(event) => setFirstName(event.currentTarget.value)}
           value={firstName}
         />
-        <label htmlFor="firstName">Last name</label>
+        <label htmlFor="lastName">Last name</label>
 
         <input
           onChange={(event) => setLastName(event.currentTarget.value)}
